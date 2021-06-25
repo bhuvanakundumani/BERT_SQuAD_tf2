@@ -1,0 +1,7 @@
+#pytorch-transformers>=1.0.0
+#torch==1.8.1
+Flask>=1.1.1
+Flask-Cors>=3.0.8
+fastprogress==1.0.0
+transformers==4.6.1
+#tensorflow-gpu==2.5.0
