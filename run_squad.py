@@ -407,7 +407,7 @@ def main():
         train_dataset = load_and_cache_examples(args, tokenizer, evaluate=False, output_examples=False)
         train(args, train_dataset, model, tokenizer, config, strategy)
 
-    # Load a trained model and vocabulary that you have fine-tuned ansd saved in output_dir
+    # Load a trained model and vocabulary that you have fine-tuned and saved in output_dir
     if args.do_eval:
         config = BertConfig.from_pretrained(args.output_dir)
         print(config)

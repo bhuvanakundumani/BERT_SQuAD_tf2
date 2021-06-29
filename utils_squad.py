@@ -23,7 +23,7 @@ import logging
 import math
 import collections
 from io import open
-
+import tensorflow as tf
 import tokenization
 
 logger = logging.getLogger(__name__)
@@ -632,15 +632,16 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
 
         probs = _compute_softmax(total_scores)
 
+        
         nbest_json = []
         for (i, entry) in enumerate(nbest):
             output = collections.OrderedDict()
             output["text"] = entry.text
-            output["probability"] = probs[i]
-            output["start_logit"] = entry.start_logit
-            output["end_logit"] = entry.end_logit
+            output["probability"] = str(probs[i])
+            output["start_logit"] = str(entry.start_logit.numpy())
+            output["end_logit"] = str(entry.end_logit.numpy())
             nbest_json.append(output)
-
+        
         assert len(nbest_json) >= 1
 
         if not version_2_with_negative:
@@ -656,12 +657,13 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
                 all_predictions[example.qas_id] = best_non_null_entry.text
         all_nbest_json[example.qas_id] = nbest_json
 
+    
+
     with open(output_prediction_file, "w") as writer:
         writer.write(json.dumps(all_predictions, indent=4) + "\n")
 
-    #import ipdb; ipdb.set_trace();
-    # with open(output_nbest_file, "w") as writer:
-    #     writer.write(json.dumps(all_nbest_json, indent=4) + "\n")
+    with open(output_nbest_file, "w") as writer:
+        writer.write(json.dumps(all_nbest_json, indent=4) + "\n")
 
     if version_2_with_negative:
         with open(output_null_log_odds_file, "w") as writer:
